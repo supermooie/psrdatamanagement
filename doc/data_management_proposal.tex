@@ -1,0 +1,143 @@
+\documentclass{article}
+\usepackage[pdftex]{graphicx}
+\headheight 0in
+\headsep 0in
+\oddsidemargin 0in
+\evensidemargin 0in
+\textheight 9.5in
+\textwidth 6in
+
+\begin{document}
+
+\title{ATNF Pulsar Data Management}
+\author{Jonathan Khoo}
+\date{}
+\maketitle
+
+\section{People Involved}
+Dick Manchester, Matthew Bailes, George Hobbs, Simon Johnston, Mike Keith, Ryan Shannon, Willem van Straten, Andrew Jameson, Phil Edwards, Vince McIntyre, Jonathan Khoo
+
+\section{Problem}
+The system for transferring data from Parkes to Epping is `clunky' and incomplete. It is run manually and relies on multiple people. Currently, there is no way of knowing the current status of the data transfer and what files are where. It is incomplete because it only transfers fold-mode DFB data (no search-mode DFB, APSR, CASPSR, BPSR, or AFB data). The aim of the ANDS-ATNF project is to make all Parkes data `discoverable' and searchable (conforming to any embargo-period restrictions). With the current data-transfer system in place, preparing the data for the ANDS-ATNF project requirements is another layer of unnecessarily manual work.
+
+\section{Solution}
+\subsection{Goal}
+Create a system that runs in the background to manage the pulsar data taken at Parkes. The system will automatically transfer completeted observations from the DFBs (both fold- and search-mode data), AFB (search-mode data), APSR (fold-mode data), and CASPSR (fold-mode data), categorising and storing them at Epping. By the final storage stage, the transferred pulsar data will be in psrfits format. The system will also have the functionality to display important status information and send out notifications wherever deemed appropriate (e.g., when disk space is running out, faulty files, etc.). Data produced by BPSR will not be immediately included in this system.
+
+\subsection{Web Pages}
+A suite of web pages will be used to control and monitor the system.
+
+\subsubsection{Control}
+Control web pages will be accessible after authentication and only a select number of people will have authorised access. They will provide the following functionality:
+
+\begin{enumerate}
+\item Display values from the configuration file (e.g., how often to check for completed observations, time threshold to determine if an observation is complete, etc.).
+\end{enumerate}
+
+\subsubsection{Monitor}
+Monitoring web pages will be accessible from any computer within the internal ATNF network. These pages will provide the following functionality:
+
+\begin{enumerate}
+\item Completed Parkes observations that are currently in queue waiting to be copied from Parkes to Epping.
+\item Recent successfully copied observations at Epping (time-sorted by default, and grouped by day).
+\item Disk space status for every disk at Parkes (DFBs and the RAID containing the APSR and CASPSR data.
+\item Disk space status for every disk containing raw pulsar data at Epping.
+\item Files at Parkes that have not been backed up.
+\item Files at Epping that require attention (e.g., no project ID entered, junk data---only the header information has been written, symlinks that do not point to the raw file correctly etc.).
+\item Files at Epping that do not have corresponding existing symlinks in the ANDS-ATNF folder. (Currently, files are collated from one folder which further categorised by project ID.)
+\item Search-mode data at Parkes $>$ 2GB.
+\end{enumerate}
+
+\subsection{Backends}
+The data transfer itself will assume a uniform directory structure for each computer hosting data from each backend. All data to be transferred will already be in psrfits format.
+
+\subsubsection{DFBs}
+The data is already in the psrfits format. However, possible re-structuring of directories may be required to conform to the chosen backend directory structure.
+
+\subsubsection{AFB}
+AFB data will be converted to psrfits (search-mode) format. George Hobbs has code to perform this conversion.
+
+\subsubsection{APSR}
+APSR data will be pre-processed and stored on a new RAID from Swinburne that will be available at Parkes in one month (mid-December, 2010). The output will be files in psrfits format, ready to be transferred to Epping and categorised immediately (without further processing). Andrew Jameson is the point of contact regarding the new RAID. I will work with him to gain access to the RAID and deploy necessary scripts to manage APSR data at Parkes.
+
+\subsubsection{CASPSR}
+CASPSR data will be processed and available similarly to APSR.
+
+\subsection{The Data Transfer}
+The data transfer can be simplified to:
+\begin{verbatim}
+for all completed observations: 
+  if file (at Parkes) has not been successfully copied to Epping:
+    push it into the copy-to-Epping queue
+
+---------------------------------------------------------------
+
+while there are files in the copy-to-Epping queue:
+  copy file to Epping
+  if checksum is correct (at Epping):
+    remove file from copy-to-Epping queue
+\end{verbatim}
+
+\subsection{Data Shuffling at Parkes}
+Currently, DFB data files are deleted from the Parkes disks as follows:
+\begin{itemize}
+\item Fold-mode data: when backed up on tape at Parkes and copied to Epping.
+\item Search-mode data: when backed up on tape at Parkes.
+\end{itemize}
+
+To perform the data removal at Parkes, Dick follows a set of instructions which verifies the data and manually removes the target files. Gina Spratt maintains an email notification which is triggered when a data disk at Parkes is more than 86\% full. John Sarkissian does the tape backup at Parkes. This process should be examined and automated where possible to reduce the overall dependence on multiple people. This system will implement the necessary process to delete files for all backends at Parkes that have been backed up onto tape at Parkes and successfully copied from Parkes to Epping. Extensive testing will be performed before data is actually deleted automatically. Only psrfits files will be removed in this system. Other formats produced by APSR, CASPSR, and AFB will be untouched.
+
+\subsection{Automatic Ingest for ANDS-ATNF}
+Conforming with the requirements of the ANDS-ATNF data-archiving project, symlinks to all newly transferred data (and all existing data) will be created and placed in a separate directory tree for ANDS-ATNF. When the data gets copied to Epping, the following pre-processing steps will be performed automatically:
+
+\begin{itemize}
+\item Create a fully scrunched (polarisation-, frequency-, and time-scrunched) archive.
+\item Create an image of the fully scrunched profile.
+\end{itemize}
+
+Symlinks will also be created in the ANDS-ATNF directory tree. The structure of this directory tree is:
+
+\begin{verbatim}
+root directory -> project ID -> source name -> data files
+\end{verbatim}
+
+Where \emph{root directory} is /pulsar/archive21/ANDS; \emph{project ID} is the value of PROJ\_ID (from the main header of the psrfits file); and, \emph{source name} is either the pulsar name, or the pulsar name with `\_R' appended to it (signifying a calibration file).
+
+\subsection{Directory Structure at Epping}
+A new directory structure for the pulsar data at Epping will be defined, implemented, and utlised.
+
+\subsubsection{Fold Data}
+Currently, all DFB data (located at Epping) are stored across five `root' directories (i.e., \$DFB1--\$DFB5). The structure is as follows:
+
+\begin{verbatim}
+root directory -> source name -> data files
+\end{verbatim}
+
+Where \emph{root directory} is \$DFB1--\$DFB5, and \emph{source name} is either the pulsar name, or the pulsar name with `\_R' appended to it (signifying a calibration file). The folders which contain CPSR2 and APSR data have the same structure but are stored, once again, on separate disks. In order to search for data, all five \$DFB directories must be searched. The new directory structure will be something like:
+
+\begin{verbatim}
+root directory -> year of observation -> source name -> symlinks to data files
+\end{verbatim}
+
+A single folder listing for all data (from all backends) once in the \emph{source name} level. The reason for the additional \emph{year of observation} step is to prevent too many files/symlinks from being contained in a single directory. Mike suggested that the symlink targets can be maintained by using a database which contains the location of the raw data files.
+
+\subsubsection{Search Data}
+Currently, search-mode data must be transferred from Parkes to Epping manually. This system will automatically copy all search-mode data $<$ 2GB and store them in the following directory structure:
+
+\begin{verbatim}
+root directory -> year of observation -> identifier -> symlinks to data files
+\end{verbatim}
+
+Where \emph{identifier} is either the value of the SRC\_NAME field from the header (that also exists in psrcat) or a folder name grouping files every three months. Files $>$ 2GB will not be transferred automatically---it will be up to the observer's discretion.
+
+\subsection{Backups}
+\subsubsection{Parkes}
+Currently, all DFB fold-mode data are backed up onto tape. Search-mode data is deleted when the purges are performed. This will remain the same.
+
+\subsubsection{Epping}
+Currently, all DFB fold-mode data are backed up onto tape. This is conducted manually every 1--6 months. The commencement of this project will see both fold and search-mode data that is transferred from Parkes to Epping will be backed up on tape.
+
+\subsection{Other Data-processing Pipelines (PPTA, Fermi, etc.)}
+This system will not automatically start data-processing pipelines (PPTA, Fermi, etc.)---it will be up to the processing pipelines to determine what data to process and when to process them. However, the same database utilised in this system may be queried and cross-checked to create a list of target files that require processing.
+
+\end{document}
