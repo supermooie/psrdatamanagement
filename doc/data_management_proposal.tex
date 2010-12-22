@@ -1,8 +1,7 @@
-\documentclass{article}
-\usepackage[pdftex]{graphicx}
+% psrdatamanagement_srs.tex - SRS for the Pulsar Data Management project.
 
-\usepackage{tikz}
-\usetikzlibrary{snakes}
+\documentclass[a4paper,11pt]{article}
+\usepackage[pdftex]{graphicx}
 
 \headheight 0in
 \headsep 0in
@@ -13,20 +12,55 @@
 
 \begin{document}
 
-\title{ATNF Pulsar Data Management}
+\title{Software Requirements Specification for ATNF Pulsar Data Management}
 \author{Jonathan Khoo}
-\date{}
+\date{\today}
 \maketitle
+\clearpage
 
-\section{People Involved}
-Dick Manchester, Matthew Bailes, George Hobbs, Simon Johnston, Mike Keith, Ryan Shannon, Willem van Straten, Andrew Jameson, Phil Edwards, Vince McIntyre, Jonathan Khoo
+\section{Introduction}
 
-\section{Problem}
-The system for transferring data from Parkes to Epping is `clunky' and incomplete. It is run manually and relies on multiple people. Currently, there is no way of knowing the current status of the data transfer and what files are where. It is incomplete because it only transfers fold-mode DFB data (no search-mode DFB, APSR, CASPSR, BPSR, or AFB data). The aim of the ANDS-ATNF project is to make all Parkes data `discoverable' and searchable (conforming to any embargo-period restrictions). With the current data-transfer system in place, preparing the data for the ANDS-ATNF project requirements is another layer of unnecessarily manual work.
+%\subsection{People Involved}
+%Dick Manchester, Matthew Bailes, George Hobbs, Simon Johnston, Mike Keith, Ryan Shannon, Willem van Straten, Andrew Jameson, Phil Edwards, Vince McIntyre, Jessica Chapman, Gina Spratt, Jonathan Khoo
 
-\section{Solution}
-\subsection{Goal}
-Create a system that runs in the background to manage the pulsar data taken at Parkes. The system will automatically transfer completeted observations from the DFBs (both fold- and search-mode data), AFB (search-mode data), APSR (fold-mode data), and CASPSR (fold-mode data), categorising and storing them at Epping. Pulsar data transferred from Parkes to Epping will be in psrfits format. The system will display file and disk-space information, sending notifications whenever needed (e.g., when disk space is running out, faulty files, etc.). Data produced by BPSR will not be included in this system, but could be easily added later on, due to the system's extensible design.
+\subsection{Purpose}
+This system will be created, aiming to lower the amount of manual work required and to make the current data transfer more robust. It will automatically transfer all (BUT NOT ALL) pulsar data, taken at Parkes, to Epping, and stakeholders will be able to monitor this system via a set of web pages. Software will be developed to perform automated book-keeping at Parkes and Epping.
+
+\subsection{Intended Audience}
+As this document details the general features and requirements of the project, this document is intended for viewing by all stakeholders (pulsar observers, users at Parkes and Epping, developers, computing staff at Parkes and Epping, and ... ).
+
+\subsection{Document and Project Conventions}
+\begin{itemize}
+\item `DFBs' refers to both PDFB3 and PDFB4. As these backends are basically identical (regarding this project), for the purpose of documentation in this project, they have been commonly grouped together.
+\item `System' is the compilation of all software developed and changes made in this project.
+\item `Project' is the overall process of developing the system.
+\end{itemize}
+
+\subsection{Project Scope}
+Software will be developed in order to perform the automated data transfer from Parkes to Epping from the following backends:
+\begin{enumerate}
+\item DFB3
+\item DFB4
+\item AFB
+\item APSR
+\item CASPSR
+\end{enumerate}
+
+Note that BPSR will not be included in this system. However, due to the extensible design of this system, it can be added easily in the future (assuming the necessary disk space at Parkes and Epping is available, and the file format can be converted into the required psrfits format). The development of this system will occur in parallel to the current work operations---all observing, and usual data transfer will be unhampered and will continue until the completion of this project. The directory structure at Epping will undergo a large change (see: blahhhhhhhhhhh). Re-structuring of the data disks at Epping will also be done in order to provide a more robust system for the user.
+
+\subsection{References}
+\begin{itemize}
+\item Project management system: https://pm.atnf.csiro.au/science/projects/psrdatamanagement
+\item SVN repository: https://svn.atnf.csiro.au/psrdatamanagement
+\end{itemize}
+
+\section{Overall Descriptions}
+\subsection{System Perspective}
+The current method for transferring data from Parkes to Epping is inpractical and incomplete. It is run manually and relies on multiple people. Currently, there is no way of knowing the current status of the data transfer and what files are where and DFB fold-mode data are transferred---no search-mode DFB, APSR, CASPSR, BPSR, or AFB data. A separate project, ANDS-ATNF data archive, aims to make all Parkes data `discoverable' and searchable. With the current data-transfer system in place, preparing the data for the ANDS-ATNF project requirements is another layer of unnecessarily manual work.
+
+The Pulsar Data Management project will create a system to manage all pulsar data (fold mode and search mode) taken at Parkes. The system, running in the background, will automatically transfer completeted observations from the DFBs (both fold- and search-mode data), AFB (search-mode data), APSR (fold-mode data), and CASPSR (fold-mode data), to Epping. All pulsar data transferred from Parkes to Epping will be in psrfits format with the necessary fields correctly populated (see: a later on blah blah blah). The project will produce a system that will display file and disk-space information, and send notifications whenever needed (ee: more blah blah). The system will be designed in an extensible manner, so the addition of other backends can be easily done.
+
+\subsection{System Features}
 
 \subsection{Web Pages}
 A suite of web pages will be used to control and monitor the system.
