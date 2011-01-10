@@ -27,13 +27,13 @@
 This system will be created, aiming to lower the amount of manual work required and to make the current data transfer more robust. It will automatically transfer all (BUT NOT ALL) pulsar data, taken at Parkes, to Epping, and stakeholders will be able to monitor this system via a set of web pages. Software will be developed to perform automated book-keeping at Parkes and Epping.
 
 \subsection{Intended Audience}
-As this document details the general features and requirements of the project, this document is intended for viewing by all stakeholders (pulsar observers, users at Parkes and Epping, developers, computing staff at Parkes and Epping, and ... ).
+As this document details the general features and requirements of the project, this document is intended for viewing by all involved (pulsar observers, users at Parkes and Epping, developers, computing staff at Parkes and Epping, and ... ).
 
 \subsection{Document and Project Conventions}
 \begin{itemize}
-\item `DFBs' refers to both PDFB3 and PDFB4. As these backends are basically identical (regarding this project), for the purpose of documentation in this project, they have been commonly grouped together.
-\item `System' is the compilation of all software developed and changes made in this project.
-\item `Project' is the overall process of developing the system.
+\item \emph{DFBs} refers to both PDFB3 and PDFB4. As these backends are basically identical (regarding this project), for the purpose of documentation in this project, they have been commonly grouped together.
+\item \emph{System} is the compilation of all software developed and changes made in this project.
+\item \emph{Project} is the overall process of developing the system.
 \end{itemize}
 
 \subsection{Project Scope}
@@ -61,9 +61,49 @@ The current method for transferring data from Parkes to Epping is inpractical an
 The Pulsar Data Management project will create a system to manage all pulsar data (fold mode and search mode) taken at Parkes. The system, running in the background, will automatically transfer completeted observations from the DFBs (both fold- and search-mode data), AFB (search-mode data), APSR (fold-mode data), and CASPSR (fold-mode data), to Epping. All pulsar data transferred from Parkes to Epping will be in psrfits format with the necessary fields correctly populated (see: a later on blah blah blah). The project will produce a system that will display file and disk-space information, and send notifications whenever needed (ee: more blah blah). The system will be designed in an extensible manner, so the addition of other backends can be easily done.
 
 \subsection{System Features}
+\begin{enumerate}
+\item Software to transfer pulsar data from Parkes to Epping automatically.
+\item A suite of web pages will be used to control and monitor the system.
+\item Software to perform various bookkeeping tasks at Epping to pre-process and categorise the pulsar data.
+\end{enumerate}
+
+\subsection{Users}
+Primarily, the expected users of the control and monitoring web pages are ones that have a vested interest (and responsibility) in the status of the pulsar data disks at Parkes and at Epping. Since the project will restructure disks at Parkes and Epping, the wider pulsar community will be indirectly affected. However, the changes made to the disks at Parkes and Epping will be transparent to the everyday pulsar astronomer.
+
+\subsection{Operating Environment}
+The project will be implemented in python, shell scripts, mysql, and PHP. All code will be clearly documented and will reside in the ATNF SVN repository (see 1.5 References). The project management system, Redmine, will be utlised to control and oversee the development process (see 1.5 References).
+
+\subsection{Design and Implementation Constraints}
+Required fields in PSRFITS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+\subsection{User Documentation}
+Documentation detailing what has been done will provided upon completion of the project. It will include:
+\begin{enumerate}
+\item An overview of the data-transfer pipeline.
+\item How to use the monitoring web pages.
+\item How to add backends to the system.
+\end{enumerate}
+
+Additionally, the code documentation and project management system will provide sufficient information for anyone performing maintenance tasks or modification to the system.
+
+\subsection{Assumptions and Dependencies}
+The data transfer will assume a uniform directory structure on each computer hosting data, produced from each backend, at Parkes. All data to be transferred to Epping will be in psrfits format.
+
+\subsubsection{DFBs}
+Since the data are already in the psrfits format, no further conversion is required. However, re-structuring of directories may be required to implement the chosen backend directory structure.
+
+\subsubsection{AFB}
+AFB data will be converted to psrfits (search-mode) format. George Hobbs has code to perform this conversion.
+
+\subsubsection{APSR}
+APSR data will be pre-processed and stored on a new RAID from Swinburne that will be available at Parkes around mid-February, 2011. The output will be files in psrfits format, ready to be transferred to Epping and categorised immediately (without further processing). Andrew Jameson is the point of contact for the RAID. I will work with him to gain access to the RAID and deploy the necessary tools to manage APSR data at Parkes.
+
+\subsubsection{CASPSR}
+CASPSR data will be processed and available similarly to APSR.
+\section{System Features}
 
 \subsection{Web Pages}
-A suite of web pages will be used to control and monitor the system.
+The primary interface for the data-transfer pipeline will be on-line in the form of a suite of web pages. These web pages will be used to control and monitory the system.
 
 \subsubsection{Control}
 Control web pages will be accessible after authentication (only a select number of people will have authorised access). They will provide the following functionality:
@@ -86,22 +126,8 @@ Monitoring web pages will be accessible from any computer within the internal AT
 \item Search-mode data at Parkes $>$ 2GB.
 \end{enumerate}
 
-\subsection{Backends}
-The data transfer will assume a uniform directory structure on each computer hosting data, produced from each backend, at Parkes. All data to be transferred to Epping will be in psrfits format.
+\subsection{Data Transfer}
 
-\subsubsection{DFBs}
-Since the data are already in the psrfits format, no further conversion is required. However, re-structuring of directories may be required to implement the chosen backend directory structure.
-
-\subsubsection{AFB}
-AFB data will be converted to psrfits (search-mode) format. George Hobbs has code to perform this conversion.
-
-\subsubsection{APSR}
-APSR data will be pre-processed and stored on a new RAID from Swinburne that will be available at Parkes around mid-February, 2011. The output will be files in psrfits format, ready to be transferred to Epping and categorised immediately (without further processing). Andrew Jameson is the point of contact for the RAID. I will work with him to gain access to the RAID and deploy the necessary tools to manage APSR data at Parkes.
-
-\subsubsection{CASPSR}
-CASPSR data will be processed and available similarly to APSR.
-
-\subsection{The Data Transfer}
 The data transfer can be simplified to:
 \begin{verbatim}
 for all completed observations: 
