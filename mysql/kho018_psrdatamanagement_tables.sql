@@ -32,6 +32,7 @@ CREATE TABLE `files` (
   `file_last_modified` datetime default NULL,
   `project_id` varchar(5) default NULL,
   `last_updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `md5` varchar(32) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
@@ -60,4 +61,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-01-12  3:06:54
+-- Dump completed on 2011-01-12  3:16:06
