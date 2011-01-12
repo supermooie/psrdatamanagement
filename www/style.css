@@ -107,6 +107,34 @@ line-height: 30px;
 .right a { text-decoration: none }
 
 #footer {
+  position: fixed;
+/*position: absolute;*/
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 28px;
+    background-color: #393939;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#footer-nav { 
+  /*position: absolute;*/
+  position: fixed;
+    left: 11px;
+    bottom: 0px;
+    color: #FFFFFF;
+    height: 18px; }
+
+#footer-nav ul,
+#footer-nav li  {
+    display: inline;
+}
+
+/*#footer {
+  width:50%;
+  margin-left: auto;
+  margin-right: auto;
   position:absolute;
     width: 100%;
     height: 48px;
@@ -119,12 +147,15 @@ line-height: 30px;
     left: 11px;
     color: #FFFFFF;
     height: 18px;
-  margin-top: 20px;}
+  margin-top: 40px;
+  padding-top:20px;
+}
+
 
 #footer-nav ul,
 #footer-nav li  {
     display: inline;
-}
+}*/
 
 img {
     /* Silly IE...  Doesn't use bicubic by default... */
@@ -212,6 +243,11 @@ table.inner_gridtable td {
   margin-bottom: 20px;
 }
 
+#control_box {
+  clear: both;
+  margin-bottom: 20px;
+}
+
 #text-box {
   width: 40%;
   clear: both;
@@ -284,7 +320,32 @@ a.button:active span {
   clear: both;
 }
 
-
-
-
-
+#demo-header{
+    width: 980px;
+    margin: 0 auto;
+    position: relative;
+}
+#login-link{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: block;
+    background: #393939;
+    padding: 5px 15px 5px 15px;
+    color: #FFF;
+}
+#login-panel{
+    position: absolute;
+    top: 26px;
+    right: 0px;
+    width: 190px;
+    padding: 10px 15px 5px 15px;
+    background: #393939;
+    font-size: 8pt;
+    font-weight: bold;
+    color: #FFF;
+    display: none;
+}
+label{
+    line-height: 1.8;
+}
