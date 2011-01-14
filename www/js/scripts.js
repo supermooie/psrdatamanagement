@@ -30,14 +30,6 @@ $(document).ready(function() {
 
 });
 
-window.onblur = function() {
-  document.title = 'blurry';
-}
-
-window.onfocus = function() {
-  document.title = 'focused';
-}
-
 $(document).keydown(function(e) {
     if (e.keyCode == 27) {
       $("#login-panel").hide(0);
