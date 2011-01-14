@@ -12,15 +12,31 @@ $(document).ready(function() {
           $.ajax({
               type: "POST",
               url: "login.php",
-              data: dataString,
-              success: function() {
-                $('#control_box').show();
-              }
+              data: dataString
           });
         }
     });
 
+    $('a#logout-link').click(function() {
+        $.ajax({
+            type: "POST",
+            url: "logout.php",
+            data: "",
+            success: function() {
+              window.location.reload();
+            }
+        });
+    });
+
 });
+
+window.onblur = function() {
+  document.title = 'blurry';
+}
+
+window.onfocus = function() {
+  document.title = 'focused';
+}
 
 $(document).keydown(function(e) {
     if (e.keyCode == 27) {
