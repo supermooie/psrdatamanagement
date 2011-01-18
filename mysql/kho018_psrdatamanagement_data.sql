@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: kho018_psrdatamanagement
 -- ------------------------------------------------------
--- Server version	5.0.51a-24+lenny4-log
+-- Server version	5.0.51a-24+lenny5-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -21,7 +21,7 @@
 
 LOCK TABLES `config` WRITE;
 /*!40000 ALTER TABLE `config` DISABLE KEYS */;
-INSERT INTO `config` VALUES (1,1,5,5);
+INSERT INTO `config` VALUES (1,1,5,5,'2011-01-17 06:01:33');
 /*!40000 ALTER TABLE `config` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -40,8 +40,28 @@ UNLOCK TABLES;
 
 LOCK TABLES `members` WRITE;
 /*!40000 ALTER TABLE `members` DISABLE KEYS */;
-INSERT INTO `members` VALUES (1,'psrdatamanager','m4n4g3r');
+INSERT INTO `members` VALUES (1,'admin','admin');
 /*!40000 ALTER TABLE `members` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `posts`
+--
+
+LOCK TABLES `posts` WRITE;
+/*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+INSERT INTO `posts` VALUES (1,'The title','This is the post body.','2011-01-17 12:06:48',NULL),(2,'A title once again','And the post body follows.','2011-01-17 12:06:48',NULL),(3,'Title strikes back','This is really exciting! Not.','2011-01-17 12:06:50',NULL);
+/*!40000 ALTER TABLE `posts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `statuses`
+--
+
+LOCK TABLES `statuses` WRITE;
+/*!40000 ALTER TABLE `statuses` DISABLE KEYS */;
+INSERT INTO `statuses` VALUES (1,'pipeline',1,'The overall statues of the data-management pipeline.','2011-01-18 01:11:58'),(2,'Parkes-Epping network link',1,'The status of the network link between Parkes and Epping.','2011-01-18 01:14:36'),(3,'DFB3 daemon (at Parkes)',1,'The status of the DFB3 daemon at Parkes.','2011-01-18 01:15:44');
+/*!40000 ALTER TABLE `statuses` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +73,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-01-12  3:48:38
+-- Dump completed on 2011-01-18  5:51:35
