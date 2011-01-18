@@ -55,6 +55,7 @@
     <?php
       echo $scripts_for_layout;
       echo $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js');
+      echo $this->Html->script('scripts.js');
     ?>
   </head>
 </body>

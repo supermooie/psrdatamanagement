@@ -1,7 +1,10 @@
-<!-- File: /app/views/monitor/index.ctp  -->
+<!-- File: /app/views/statuses/index.ctp  -->
 
-<h1>Pipeline Status</h1>
+<h1>Statuses</h1>
 
+(This table will updated every minute.)
+
+<!--
 <table>
   <tr>
     <th>
@@ -21,3 +24,7 @@
     </td>
   </tr>
 </table>
+-->
+
+<table id="statuses"></table>
+
