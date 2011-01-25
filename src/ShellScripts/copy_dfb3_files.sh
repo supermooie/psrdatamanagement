@@ -24,6 +24,7 @@ pipeline_status=`/var/www/vhosts/psrdatamanagement.atnf.csiro.au/scripts/pipelin
 if [ $pipeline_status == 'True' ]
 then
   /usr/bin/rsync -av --include "*.cf" --include "*.rf" --exclude "*" corr@pkccc3:/data1/PDFB3_1/* /pulsar/archive21/incoming_files/DFB3/ > /var/www/vhosts/psrdatamanagement.atnf.csiro.au/htdocs/logs/rsync_dfb3.txt
+  echo "" >> /var/www/vhosts/psrdatamanagement.atnf.csiro.au/htdocs/logs/rsync_dfb3.txt
   date >> /var/www/vhosts/psrdatamanagement.atnf.csiro.au/htdocs/logs/rsync_dfb3.txt
 fi
 
