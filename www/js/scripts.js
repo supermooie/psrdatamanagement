@@ -28,6 +28,19 @@ $(document).ready(function() {
         });
     });
 
+    $('#pipeline_status').load('get_pipeline_status.php');
+    $('#pipeline_status').hide();
+
+    setInterval(
+      function() {
+        $('#pipeline_status').load('get_pipeline_status.php');
+
+        if ($('#pipeline_status').text() == 1) {
+          $('.circle').css("background", "green");
+        } else {
+          $('.circle').css("background", "red");
+        }
+      }, 2000);
 });
 
 $(document).keydown(function(e) {
@@ -35,3 +48,4 @@ $(document).keydown(function(e) {
       $("#login-panel").hide(0);
     }
 });
+

@@ -243,3 +243,32 @@ label{
 A:link {text-decoration: none}
 A:visited {text-decoration: none}
 A:active {text-decoration: none}
+
+.circle {
+  position: relative;
+  float: left;
+  /*display: block;*/
+  width: 20px;
+  height: 20px;
+  background: #333;
+  -moz-border-radius: 40px;
+  -webkit-border-radius: 40px;
+}
+
+#pipeline_status_status {
+  position: relative;
+  float: left;
+  padding-right: 40px;
+}
+
+#pipeline_status_box {
+font-size: 24px;
+letter-spacing: -1px;
+  clear: both;
+  margin-bottom: 20px;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px 10px;
+    font-weight: bold;
+}
