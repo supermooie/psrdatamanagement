@@ -19,6 +19,73 @@ $(document).ready(function() {
         });
     });
 
+    updateDfb3FilesListing();
+    setInterval(function() {
+        updateDfb3FilesListing();
+      }, 60000);
+
+    function updateDfb3FilesListing()
+    {
+      $.getJSON("index.php/files/get_dfb3_files",
+        function(data) {
+          $('#dfb3_files_listing').empty();
+          $('#dfb3_files_listing').append('<tr><th>Filename</th><th>Current Filepath</th><th>Status (ignore this)</th><th>Backend</th><th>Filesize (MB)</th><th>Project ID</th><th>Observation Finished (convert this)</th><th>Source Name</th></tr>');
+
+          $.each(data, function(i,stat){
+              var content = '<tr>';
+              content += '<td>' + stat.Files.filename + '</td>';
+              content += '<td>' + stat.Files.filepath + '</td>';
+              content += '<td>' + stat.Files.status + '</td>';
+              content += '<td>' + stat.Files.backend + '</td>';
+              content += '<td>' + stat.Files.filesize + '</td>';
+              content += '<td>' + stat.Files.project_id + '</td>';
+              //content += '<td>' + stat.Files.file_last_modified + '</td>';
+              content += '<td>' + fromUnixTimestamp(stat.Files.file_last_modified) + '</td>';
+              content += '<td>' + stat.Files.source_name + '</td>';
+              content += '</tr>';
+
+              $('#dfb3_files_listing').append(content);
+          });
+      });
+    }
+
+    updateDfb4FilesListing();
+    setInterval(function() {
+        updateDfb4FilesListing();
+      }, 60000);
+
+    function updateDfb4FilesListing()
+    {
+      $.getJSON("index.php/files/get_dfb4_files",
+        function(data) {
+          $('#dfb4_files_listing').empty();
+          $('#dfb4_files_listing').append('<tr><th>Filename</th><th>Current Filepath</th><th>Status (ignore this)</th><th>Backend</th><th>Filesize (MB)</th><th>Project ID</th><th>Observation Finished (convert this)</th><th>Source Name</th></tr>');
+
+          $.each(data, function(i,stat){
+              var content = '<tr>';
+              content += '<td>' + stat.Files.filename + '</td>';
+              content += '<td>' + stat.Files.filepath + '</td>';
+              content += '<td>' + stat.Files.status + '</td>';
+              content += '<td>' + stat.Files.backend + '</td>';
+              content += '<td>' + stat.Files.filesize + '</td>';
+              content += '<td>' + stat.Files.project_id + '</td>';
+              //content += '<td>' + stat.Files.file_last_modified + '</td>';
+              content += '<td>' + fromUnixTimestamp(stat.Files.file_last_modified) + '</td>';
+              content += '<td>' + stat.Files.source_name + '</td>';
+              content += '</tr>';
+
+              $('#dfb4_files_listing').append(content);
+          });
+      });
+    }
+
+    function fromUnixTimestamp(unixTimestamp)
+    {
+      var date = new Date(unixTimestamp*1000);
+
+      return date;
+    }
+
     function updatePipelineStatus()
     {
       $.getJSON("index.php/pipeline_statuses/getStatuses",
@@ -38,10 +105,30 @@ $(document).ready(function() {
       });
     }
 
+    function updateDfbRsyncLog()
+    {
+      $.get("http://psrdatamanagement-int.atnf.csiro.au/read_rsync_log.php", { backend: "dfb3" },
+        function(data) {
+          $('#dfb3_rsync_log').html(data);
+      });
+
+      $.get("http://psrdatamanagement-int.atnf.csiro.au/read_rsync_log.php", { backend: "dfb4" },
+        function(data) {
+          $('#dfb4_rsync_log').html(data);
+      });
+    }
+
     // Overall pipeline status - refresh main pipeline status every minute.
     setInterval(function() {
         updatePipelineStatus();
       }, 60000);
+
+
+    updateDfbRsyncLog();
+
+    setInterval(function() {
+        updateDfbRsyncLog();
+      }, 3000);
 
     // Parkes disk statuses 
     $.getJSON("index.php/pks_disk_statuses/getStatuses",

@@ -1,5 +1,8 @@
 <!-- File: /app/views/statuses/index.ctp  -->
 
+<p><?php echo $this->Html->link("Current Transfers", array('action' => 'transfers')); ?></p>
+<p><?php echo $this->Html->link("Files", "Files/index"); ?></p>
+
 <h2>Pipeline Status</h2>
 
 The overall status of the data-transfer pipeline. All worker daemons read this value and only process if the pipeline is running. The value is updated (from the database) every minute.
@@ -11,28 +14,6 @@ The overall status of the data-transfer pipeline. All worker daemons read this v
 Statuses of each worker daemon.
 
 (This table will automatically update every minute.)
-
-<!--
-<table>
-  <tr>
-    <th>
-      Running
-    </th>
-    <th>
-      Last Updated
-    </th>
-  </tr>
-
-  <tr>
-    <td>
-      <?php echo $config[0]['Monitor']['pipeline_status']; ?>
-    </td>
-    <td>
-      <?php echo $config[0]['Monitor']['last_updated']; ?>
-    </td>
-  </tr>
-</table>
--->
 
 <table id="daemon_statuses"></table>
 

@@ -13,6 +13,10 @@ class MonitorController extends AppController
 
     $this->Session->setFlash('Hello.');
   }
+
+  function transfers()
+  {
+  }
 }
 
 ?>
