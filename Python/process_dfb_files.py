@@ -25,15 +25,25 @@ import MySQLdb
 import glob
 import sys
 
+try:
+  # TODO: Install this properly.
+  sys.path.append('/var/www/vhosts/psrdatamanagement.atnf.csiro.au/scripts/lib/python2.5/site-packages')
+  print sys.path
+  import pyfits
+except Exception, e:
+  print e
+
 class ProcessDfbFiles:
   def __init__(self, backend = None):
     self._backend = backend
 
   """
-  Extracts the aforementioned metadata from the file via python
-  and vap calls.
+  Extracts the aforementioned metadata from the file via python calls and the
+  pyfits library.
   """
   def extract_metadata_from_file(self, file):
+    self.open_fits_file(file)
+
     self._filename = os.path.basename(file)
     self._filepath = os.path.dirname(file)
     self._status = 2 # File is on disk at Epping and is in PSRFITS format.
@@ -43,40 +53,33 @@ class ProcessDfbFiles:
     self._project_id = self.get_project_id(file)
     self._source_name = self.get_source_name(file)
 
+    self.close_fits_file(file)
+
   """
-  Uses vap to get the pulsar name.
+  Uses pyfits to get the pulsar name.
   """
   def get_source_name(self, file):
-    cmd = "vap -nc name %s | awk '{print $2}'" % file
-    stdout = os.popen(cmd)
-
-    name = stdout.read().strip()
+    name = self._hdulist[0].header['SRC_NAME']
     if name:
       return name
     else:
       return 'UNDEF'
 
   """
-  Uses vap to get the PID.
+  Uses pyfits to get the PID.
   """
   def get_project_id(self, file):
-    cmd = "vap -nc projid %s | awk '{print $2}'" % file
-    stdout = os.popen(cmd)
-
-    project_id = stdout.read().strip()
+    project_id = self._hdulist[0].header['PROJID']
     if project_id:
       return project_id
     else:
       return 'UNDEF'
 
   """
-  Uses vap to get the backend.
+  Uses pyfits to get the backend.
   """
   def get_backend(self, file):
-    cmd = "vap -nc backend %s | awk '{print $2}'" % file
-    stdout = os.popen(cmd)
-
-    backend = stdout.read().strip()
+    backend = self._hdulist[0].header['BACKEND']
     if backend:
       return backend
     else:
@@ -151,6 +154,12 @@ class ProcessDfbFiles:
         return False
     except:
       raise Exception("Unable to fetch data")
+
+  def open_fits_file(self, file):
+    self._hdulist = pyfits.open(file)
+
+  def close_fits_file(self, file):
+    self._hdulist.close()
 
 def main():
 # Perform the initial check to see if the pipeline is running.
