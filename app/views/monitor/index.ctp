@@ -1,7 +1,7 @@
 <!-- File: /app/views/statuses/index.ctp  -->
 
 <p><?php echo $this->Html->link("Current Transfers", array('action' => 'transfers')); ?></p>
-<p><?php echo $this->Html->link("Files", "Files/index"); ?></p>
+<p><?php echo $this->Html->link("Files", "/files/index"); ?></p>
 
 <h2>Pipeline Status</h2>
 

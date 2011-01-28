@@ -29,19 +29,20 @@ $(document).ready(function() {
       $.getJSON("index.php/files/get_dfb3_files",
         function(data) {
           $('#dfb3_files_listing').empty();
-          $('#dfb3_files_listing').append('<tr><th>Filename</th><th>Current Filepath</th><th>Status (ignore this)</th><th>Backend</th><th>Filesize (MB)</th><th>Project ID</th><th>Observation Finished (convert this)</th><th>Source Name</th></tr>');
+          $('#dfb3_files_listing').append('<tr><th>Filename</th><th>Current Filepath</th><th>Status (ignore this)</th><th>Filesize (MB)</th><th>Project ID</th><th>Observation Finished (convert this)</th><th>Source Name</th><th>Receiver</th><th>Centre Frequency (MHz)</th></tr>');
 
           $.each(data, function(i,stat){
               var content = '<tr>';
               content += '<td>' + stat.Files.filename + '</td>';
               content += '<td>' + stat.Files.filepath + '</td>';
               content += '<td>' + stat.Files.status + '</td>';
-              content += '<td>' + stat.Files.backend + '</td>';
               content += '<td>' + stat.Files.filesize + '</td>';
               content += '<td>' + stat.Files.project_id + '</td>';
               //content += '<td>' + stat.Files.file_last_modified + '</td>';
               content += '<td>' + fromUnixTimestamp(stat.Files.file_last_modified) + '</td>';
               content += '<td>' + stat.Files.source_name + '</td>';
+              content += '<td>' + stat.Files.frontend + '</td>';
+              content += '<td>' + stat.Files.frequency + '</td>';
               content += '</tr>';
 
               $('#dfb3_files_listing').append(content);
@@ -59,19 +60,20 @@ $(document).ready(function() {
       $.getJSON("index.php/files/get_dfb4_files",
         function(data) {
           $('#dfb4_files_listing').empty();
-          $('#dfb4_files_listing').append('<tr><th>Filename</th><th>Current Filepath</th><th>Status (ignore this)</th><th>Backend</th><th>Filesize (MB)</th><th>Project ID</th><th>Observation Finished (convert this)</th><th>Source Name</th></tr>');
+          $('#dfb4_files_listing').append('<tr><th>Filename</th><th>Current Filepath</th><th>Status (ignore this)</th><th>Filesize (MB)</th><th>Project ID</th><th>Observation Finished (convert this)</th><th>Source Name</th><th>Receiver</th><th>Centre Frequency (MHz)</th></tr>');
 
           $.each(data, function(i,stat){
               var content = '<tr>';
               content += '<td>' + stat.Files.filename + '</td>';
               content += '<td>' + stat.Files.filepath + '</td>';
               content += '<td>' + stat.Files.status + '</td>';
-              content += '<td>' + stat.Files.backend + '</td>';
               content += '<td>' + stat.Files.filesize + '</td>';
               content += '<td>' + stat.Files.project_id + '</td>';
               //content += '<td>' + stat.Files.file_last_modified + '</td>';
               content += '<td>' + fromUnixTimestamp(stat.Files.file_last_modified) + '</td>';
               content += '<td>' + stat.Files.source_name + '</td>';
+              content += '<td>' + stat.Files.frontend + '</td>';
+              content += '<td>' + stat.Files.frequency + '</td>';
               content += '</tr>';
 
               $('#dfb4_files_listing').append(content);
@@ -154,7 +156,7 @@ $(document).ready(function() {
     $.getJSON("index.php/epp_disk_statuses/getStatuses",
       function(data) {
         $('#epp_disk_statuses').empty();
-        $('#epp_disk_statuses').append('<tr><th>Environment Variable</th><th>Access Path</th><th>Data Format</th><th>Used (GB)</th>Backend<th>Used (GB)</th><th>Free Space (GB)</th> <th>Disk Capacity (GB)</th><th>Last Updated</th> </tr>');
+        $('#epp_disk_statuses').append('<tr><th>Environment Variable</th><th>Access Path</th><th>Data Format</th><th>Backend</th><th>Used (GB)</th><th>Free Space (GB)</th> <th>Disk Capacity (GB)</th><th>Last Updated</th> </tr>');
 
         $.each(data, function(i,stat){
             var content = '<tr>';
