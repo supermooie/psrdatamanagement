@@ -18,6 +18,12 @@ class FilesController extends AppController
         //'conditions' => array('backend' => 'PDFB3')
         'conditions' => array('filepath LIKE' => '%DFB3')
       ));
+
+    // Convert from the unix timestamp format.
+    foreach ($result as &$r) {
+      $r['Files']['file_last_modified'] = date("Y-m-d H:i:s", $r['Files']['file_last_modified']);
+    }
+
     echo json_encode($result);
   }
 
@@ -31,6 +37,12 @@ class FilesController extends AppController
         //'conditions' => array('backend' => 'PDFB4')
         'conditions' => array('filepath LIKE' => '%DFB4')
       ));
+
+    // Convert from the unix timestamp format.
+    foreach ($result as &$r) {
+      $r['Files']['file_last_modified'] = date("Y-m-d H:i:s", $r['Files']['file_last_modified']);
+    }
+
     echo json_encode($result);
   }
 }

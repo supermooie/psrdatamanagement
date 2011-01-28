@@ -38,8 +38,7 @@ $(document).ready(function() {
               content += '<td>' + stat.Files.status + '</td>';
               content += '<td>' + stat.Files.filesize + '</td>';
               content += '<td>' + stat.Files.project_id + '</td>';
-              //content += '<td>' + stat.Files.file_last_modified + '</td>';
-              content += '<td>' + fromUnixTimestamp(stat.Files.file_last_modified) + '</td>';
+              content += '<td>' + stat.Files.file_last_modified + '</td>';
               content += '<td>' + stat.Files.source_name + '</td>';
               content += '<td>' + stat.Files.frontend + '</td>';
               content += '<td>' + stat.Files.frequency + '</td>';
@@ -69,8 +68,7 @@ $(document).ready(function() {
               content += '<td>' + stat.Files.status + '</td>';
               content += '<td>' + stat.Files.filesize + '</td>';
               content += '<td>' + stat.Files.project_id + '</td>';
-              //content += '<td>' + stat.Files.file_last_modified + '</td>';
-              content += '<td>' + fromUnixTimestamp(stat.Files.file_last_modified) + '</td>';
+              content += '<td>' + stat.Files.file_last_modified + '</td>';
               content += '<td>' + stat.Files.source_name + '</td>';
               content += '<td>' + stat.Files.frontend + '</td>';
               content += '<td>' + stat.Files.frequency + '</td>';
@@ -79,13 +77,6 @@ $(document).ready(function() {
               $('#dfb4_files_listing').append(content);
           });
       });
-    }
-
-    function fromUnixTimestamp(unixTimestamp)
-    {
-      var date = new Date(unixTimestamp*1000);
-
-      return date;
     }
 
     function updatePipelineStatus()
