@@ -33,6 +33,44 @@ CREATE TABLE `config` (
 SET character_set_client = @saved_cs_client;
 
 --
+-- Table structure for table `daemon_statuses`
+--
+
+DROP TABLE IF EXISTS `daemon_statuses`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `daemon_statuses` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(30) default NULL,
+  `status` tinyint(1) default NULL,
+  `description` varchar(200) default NULL,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `epp_disk_statuses`
+--
+
+DROP TABLE IF EXISTS `epp_disk_statuses`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `epp_disk_statuses` (
+  `id` int(11) NOT NULL auto_increment,
+  `env_variable` varchar(20) default NULL,
+  `access_path` varchar(50) default NULL,
+  `data_format` varchar(50) default NULL,
+  `backend_name` varchar(50) default NULL,
+  `disk_used` int(11) default NULL,
+  `disk_free` int(11) default NULL,
+  `disk_capacity` int(11) default NULL,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `files`
 --
 
@@ -46,10 +84,13 @@ CREATE TABLE `files` (
   `status` int(3) default NULL,
   `backend` varchar(30) default NULL,
   `filesize` int(4) default NULL,
-  `file_last_modified` datetime default NULL,
   `project_id` varchar(5) default NULL,
   `last_updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `md5` varchar(32) default NULL,
+  `source_name` varchar(30) default NULL,
+  `file_last_modified` int(10) unsigned default NULL,
+  `frontend` varchar(30) default NULL,
+  `frequency` decimal(6,2) default NULL,
+  `obs_length` decimal(6,2) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
@@ -70,6 +111,42 @@ CREATE TABLE `members` (
 SET character_set_client = @saved_cs_client;
 
 --
+-- Table structure for table `pipeline_statuses`
+--
+
+DROP TABLE IF EXISTS `pipeline_statuses`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `pipeline_statuses` (
+  `id` int(10) NOT NULL auto_increment,
+  `status` tinyint(1) default NULL,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `comment` varchar(200) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `pks_disk_statuses`
+--
+
+DROP TABLE IF EXISTS `pks_disk_statuses`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `pks_disk_statuses` (
+  `id` int(11) NOT NULL auto_increment,
+  `backend_name` varchar(20) default NULL,
+  `description` varchar(200) default NULL,
+  `disk_used` int(11) default NULL,
+  `disk_free` int(11) default NULL,
+  `disk_capacity` int(11) default NULL,
+  `access_path` varchar(50) default NULL,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `posts`
 --
 
@@ -87,20 +164,19 @@ CREATE TABLE `posts` (
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `statuses`
+-- Table structure for table `transfers`
 --
 
-DROP TABLE IF EXISTS `statuses`;
+DROP TABLE IF EXISTS `transfers`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `statuses` (
+CREATE TABLE `transfers` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(30) default NULL,
-  `status` tinyint(1) default NULL,
-  `description` varchar(200) default NULL,
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `backend` varchar(30) default NULL,
+  `success` tinyint(1) default NULL,
+  `time_of_transfer` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -112,4 +188,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-01-18  5:51:35
+-- Dump completed on 2011-01-28  1:12:49
