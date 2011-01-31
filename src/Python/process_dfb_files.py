@@ -13,7 +13,7 @@
 #   7. project_id
 #   8. source_name
 #
-# The metadata is then entered into the 'files' table of the database.
+# The metadata is then entered into the 'psrfits_files' table of the database.
 #
 # Author: Jonathan Khoo
 # Date:   25.01.11
@@ -24,11 +24,11 @@ import os
 import MySQLdb
 import glob
 import sys
+import time
 
 try:
   # TODO: Install this properly.
   sys.path.append('/var/www/vhosts/psrdatamanagement.atnf.csiro.au/scripts/lib/python2.5/site-packages')
-  print sys.path
   import pyfits
 except Exception, e:
   print e
@@ -52,8 +52,20 @@ class ProcessDfbFiles:
     self._file_last_modified = os.path.getmtime(file)
     self._project_id = self.get_project_id(file)
     self._source_name = self.get_source_name(file)
+    self._frontend = self.get_frontend(file)
+    self._frequency = self.get_frequency(file)
 
     self.close_fits_file(file)
+
+  """
+  Uses pyfits to get the centre frequency.
+  """
+  def get_frequency(self, file):
+    frequency = self._hdulist[0].header['OBSFREQ']
+    if frequency:
+      return frequency
+    else:
+      return 'UNDEF'
 
   """
   Uses pyfits to get the pulsar name.
@@ -62,6 +74,16 @@ class ProcessDfbFiles:
     name = self._hdulist[0].header['SRC_NAME']
     if name:
       return name
+    else:
+      return 'UNDEF'
+
+  """
+  Uses pyfits to get the frontend.
+  """
+  def get_frontend(self, file):
+    frontend = self._hdulist[0].header['FRONTEND']
+    if frontend:
+      return frontend
     else:
       return 'UNDEF'
 
@@ -122,7 +144,9 @@ class ProcessDfbFiles:
   Writes the extracted metadata to the files table in the database.
   """
   def write_metadata_to_db(self):
-    sql = "INSERT IGNORE into files (filename, filepath, status, backend, filesize, file_last_modified, project_id,  source_name) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');" % (self._filename, self._filepath, self._status, self._backend, self._filesize, self._file_last_modified, self._project_id, self._source_name)
+    sql = "INSERT IGNORE into files (filename, filepath, status, backend, filesize, file_last_modified, project_id, source_name, frontend, frequency) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');" % (self._filename, self._filepath, self._status, self._backend, self._filesize, self._file_last_modified, self._project_id, self._source_name, self._frontend, self._frequency)
+
+    #sql = "INSERT IGNORE into files (filename, filepath, status, backend, filesize, file_last_modified, project_id, source_name, frontend, frequency) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');" % (self._filename, self._filepath, self._status, self._backend, self._filesize, 1288683962, self._project_id, self._source_name, self._frontend, self._frequency)
 
     self._cursor.execute(sql)
 
@@ -143,7 +167,7 @@ class ProcessDfbFiles:
   false otherwise.
   """
   def file_exists_in_db(self, file):
-    self._sql = 'SELECT filename FROM files WHERE filename = "%s";' % os.path.basename(file)
+    self._sql = 'SELECT filename FROM psrfits_files WHERE filename = "%s";' % os.path.basename(file)
 
     try:
       self._cursor.execute(self._sql)
