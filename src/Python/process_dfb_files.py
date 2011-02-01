@@ -46,7 +46,7 @@ class ProcessDfbFiles:
 
     self._filename = os.path.basename(file)
     self._filepath = os.path.dirname(file)
-    self._status = 2 # File is on disk at Epping and is in PSRFITS format.
+    self._status = 3 # File is on disk at Epping and is in PSRFITS format.
     self._backend = self.get_backend(file)
     self._filesize = round(float(os.path.getsize(file) / 1024.0 / 1024.0), 2)
     self._file_last_modified = os.path.getmtime(file)
