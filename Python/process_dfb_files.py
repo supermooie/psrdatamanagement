@@ -144,11 +144,12 @@ class ProcessDfbFiles:
   Writes the extracted metadata to the files table in the database.
   """
   def write_metadata_to_db(self):
-    sql = "INSERT IGNORE into files (filename, filepath, status, backend, filesize, file_last_modified, project_id, source_name, frontend, frequency) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');" % (self._filename, self._filepath, self._status, self._backend, self._filesize, self._file_last_modified, self._project_id, self._source_name, self._frontend, self._frequency)
+    sql = "INSERT IGNORE into psrfits_files (filename, filepath, status, backend, filesize, file_last_modified, project_id, source_name, frontend, frequency) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');" % (self._filename, self._filepath, self._status, self._backend, self._filesize, self._file_last_modified, self._project_id, self._source_name, self._frontend, self._frequency)
 
-    #sql = "INSERT IGNORE into files (filename, filepath, status, backend, filesize, file_last_modified, project_id, source_name, frontend, frequency) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');" % (self._filename, self._filepath, self._status, self._backend, self._filesize, 1288683962, self._project_id, self._source_name, self._frontend, self._frequency)
-
-    self._cursor.execute(sql)
+    try:
+      self._cursor.execute(sql)
+    except:
+      raise Exception("Unable to insert into psrfits_files.")
 
   """
   Perform the initial connection to the database.
