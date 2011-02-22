@@ -73,6 +73,10 @@ class StoreDfbFiles:
   def process_by_directory(self):
 # Get all the files in the incoming DFB directory.
     l = [(os.path.getmtime(x), x) for x in glob.glob(self._path + '*')]
+    l.sort()
+
+# Get the modification time of the last file.
+    (last_file_modification_time, null) = l[-1]
 
     for modification_time, file in l:
       ext = os.path.splitext(file)[1]
@@ -81,8 +85,8 @@ class StoreDfbFiles:
       if not self.is_valid_psrfits_file(ext):
         continue
 
-      # Don't do anything if a file is currently being copied to Epping.
-      if self.is_currently_open(modification_time):
+      # Don't do anything to the last file if it has been modified in the last 10 minutes.
+      if modification_time == last_file_modification_time and not self.is_currently_open(modification_time):
         continue
 
 # Get the source name of the file from the database.
@@ -127,6 +131,13 @@ class StoreDfbFiles:
 # Update status is psrfits_files
           sql = 'UPDATE psrfits_files set filepath = "%s", status = status + 4 WHERE filename = "%s"' % (target_filepath, os.path.basename(file))
 
+          try:
+            self._cursor.execute(sql)
+          except Exception, e:
+            print e
+            raise Exception("Unable to update psrfits_files.")
+
+        """
       else:
         sql = 'UPDATE psrfits_files set filepath = "%s" WHERE filename = "%s"' % (target_filepath, os.path.basename(file))
         print sql
@@ -136,6 +147,7 @@ class StoreDfbFiles:
       except Exception, e:
         print e
         raise Exception("Unable to update psrfits_files.")
+        """
 
   def process_by_db_status(self):
     print ''
