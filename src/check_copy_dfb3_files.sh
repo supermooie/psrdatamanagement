@@ -9,7 +9,7 @@
 #
 
 SCRIPT_NAME="copy_dfb3_files.sh"
-SCRIPT_LOCATION="/var/www/vhosts/psrdatamanagement.atnf.csiro.au/scripts/"
+SCRIPT_LOCATION="/var/www/vhosts/psrdatamanagement.atnf.csiro.au/scripts/cron/src/
 
 pgrep -f ${SCRIPT_LOCATION}${SCRIPT_NAME} > /dev/null
 

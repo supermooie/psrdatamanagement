@@ -19,7 +19,7 @@ then
   exit
 fi
 
-pipeline_status=`/var/www/vhosts/psrdatamanagement.atnf.csiro.au/scripts/pipeline_status.py`
+pipeline_status=`/var/www/vhosts/psrdatamanagement.atnf.csiro.au/scripts/cron/src/pipeline_status.py`
 
 if [ $pipeline_status == 'True' ]
 then
