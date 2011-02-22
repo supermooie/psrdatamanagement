@@ -42,7 +42,11 @@ class ProcessDfbFiles:
   pyfits library.
   """
   def extract_metadata_from_file(self, file):
-    self.open_fits_file(file)
+    try: 
+      self.open_fits_file(file)
+    except IOError, e:
+      print e
+      raise Exception("Unable to open file.")
 
     self._filename = os.path.basename(file)
     self._filepath = os.path.dirname(file)
@@ -137,14 +141,19 @@ class ProcessDfbFiles:
       """
       if ext == '.sf' or ext == '.rf' or ext == '.cf':
         if not self.file_exists_in_db(file):
-          self.extract_metadata_from_file(file)
-          self.write_metadata_to_db()
+          try:
+            self.extract_metadata_from_file(file)
+            self.write_metadata_to_db()
+          except Exception, e:
+            print e
 
   """
   Writes the extracted metadata to the files table in the database.
   """
   def write_metadata_to_db(self):
     sql = "INSERT IGNORE into psrfits_files (filename, filepath, status, backend, filesize, file_last_modified, project_id, source_name, frontend, frequency) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');" % (self._filename, self._filepath, self._status, self._backend, self._filesize, self._file_last_modified, self._project_id, self._source_name, self._frontend, self._frequency)
+
+    print sql
 
     try:
       self._cursor.execute(sql)
@@ -181,7 +190,10 @@ class ProcessDfbFiles:
       raise Exception("Unable to fetch data")
 
   def open_fits_file(self, file):
-    self._hdulist = pyfits.open(file)
+    try: 
+      self._hdulist = pyfits.open(file)
+    except IOError, e:
+      raise e
 
   def close_fits_file(self, file):
     self._hdulist.close()
